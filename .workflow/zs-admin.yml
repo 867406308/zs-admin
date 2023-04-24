@@ -1,15 +1,15 @@
 version: '1.0'
-name: pipeline-20230424
-displayName: pipeline-20230424
+name: zs-admin
+displayName: zs-admin
 triggers:
   trigger: auto
   push:
     branches:
-      prefix:
-        - ''
+      precise:
+        - master
 stages:
-  - name: stage-c7c724df
-    displayName: 未命名
+  - name: stage-c725e0e1
+    displayName: docker构建
     strategy: naturally
     trigger: auto
     executor: []
