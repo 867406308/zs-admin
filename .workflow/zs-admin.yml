@@ -22,7 +22,7 @@ stages:
         username: root
         password: Zs@123..
         tag: ${GITEE_PIPELINE_BUILD_NUMBER}
-        dockerfile: ./zs-admin/Dockerfile
+        dockerfile: ./Dockerfile
         context: ''
         artifacts: []
         isCache: false
