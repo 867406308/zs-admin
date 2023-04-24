@@ -17,10 +17,8 @@ stages:
       - step: build@docker
         name: build_docker
         displayName: 镜像构建
-        type: account
-        repository: registry.cn-zhangjiakou.aliyuncs.com/my-admin/zs-admin
-        username: root
-        password: Zs@123..
+        type: cert
+        certificate: 9b4020d0-c4d6-013b-1e6a-7ef7888dfdd2
         tag: ${GITEE_PIPELINE_BUILD_NUMBER}
         dockerfile: ./zs-admin/Dockerfile
         context: ''
