@@ -20,7 +20,7 @@ stages:
         type: account
         repository: registry-vpc.cn-zhangjiakou.aliyuncs.com
         username: 704347074@qq.com
-        password: mydocker@123..
+        password: mydocker..
         tag: ${GITEE_PIPELINE_BUILD_NUMBER}
         dockerfile: ./zs-admin/Dockerfile
         context: ''
