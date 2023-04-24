@@ -2,6 +2,7 @@ package com.zs.common.redis;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -18,8 +19,8 @@ public class RedisUtil {
      * @param value  value
      * @param time 过期时间
      */
-    public void setObject(String key,Object value,long time){
-        redisTemplate.opsForValue().set(key, value, time, TimeUnit.SECONDS);
+    public void setObject(String key,Object value,long time, TimeUnit timeUnit){
+        redisTemplate.opsForValue().set(key, value, time, timeUnit);
     }
 
     /**
@@ -67,6 +68,7 @@ public class RedisUtil {
     public Object get(String key){
         return redisTemplate.opsForValue().get(key);
     }
+
 
     /**
      * 删除对应key

@@ -14,4 +14,7 @@ public interface ISysUserService extends IService<SysUserEntity> {
      * @return 用户对象
      */
     public SysUserDTO selectByUserName(String userName);
+
+
+
 }

@@ -1,6 +1,9 @@
 package com.zs.modules.sys.user.controller;
 
 import cn.hutool.core.bean.BeanUtil;
+import com.zs.common.core.Result;
+import com.zs.common.model.LoginUserInfo;
+import com.zs.framework.security.utils.SecurityUtil;
 import com.zs.modules.sys.user.domain.dto.SysUserDTO;
 import com.zs.modules.sys.user.domain.entity.SysUserEntity;
 import com.zs.modules.sys.user.domain.vo.SysUserVo;
@@ -13,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 
 @RestController
-@RequestMapping("sys")
+@RequestMapping("sys/user")
 public class SysUserController {
 
 
@@ -24,5 +27,12 @@ public class SysUserController {
     public void save(@RequestBody SysUserVo sysUserVo){
 
          iSysUserService.save(BeanUtil.copyProperties(sysUserVo, SysUserDTO.class));
+    }
+
+    @GetMapping("getUserInfo")
+    public Result getUserInfo(){
+        LoginUserInfo loginUserInfo = SecurityUtil.getUserInfo();
+
+          return new Result().ok(loginUserInfo);
     }
 }

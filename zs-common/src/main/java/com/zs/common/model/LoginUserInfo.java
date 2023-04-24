@@ -1,6 +1,5 @@
-package com.zs.security.model;
+package com.zs.common.model;
 
-import com.zs.modules.sys.user.domain.dto.SysUserDTO;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -9,23 +8,29 @@ import java.util.Set;
 
 public class LoginUserInfo implements UserDetails {
 
-    public SysUserDTO sysUserDTO;
+    public SysUser sysUser;
 
     private Set<String> permissions;
 
-    public LoginUserInfo(SysUserDTO sysUserDTO, Set<String> permissions){
-        this.sysUserDTO = sysUserDTO;
+    public LoginUserInfo(){
+
+    }
+    public LoginUserInfo(SysUser sysUser, Set<String> permissions){
+        this.sysUser = sysUser;
         this.permissions = permissions;
     }
+
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return null;
     }
 
+
     @Override
-    public String getPassword() {
-        return sysUserDTO.getPassword();
+    public  String getPassword() {
+        return sysUser.getPassword();
     }
 
     @Override
@@ -53,12 +58,12 @@ public class LoginUserInfo implements UserDetails {
         return false;
     }
 
-    public SysUserDTO getSysUserDTO() {
-        return sysUserDTO;
+    public SysUser getSysUser() {
+        return sysUser;
     }
 
-    public void setSysUserDTO(SysUserDTO sysUserDTO) {
-        this.sysUserDTO = sysUserDTO;
+    public void setSysUser(SysUser sysUser) {
+        this.sysUser = sysUser;
     }
 
     public Set<String> getPermissions() {

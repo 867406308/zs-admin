@@ -1,56 +1,71 @@
 package com.zs.common.utils;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.JwtException;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import cn.hutool.core.date.DateUnit;
+import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.RandomUtil;
+import com.zs.common.constant.Constants;
+import com.zs.common.exception.ZsException;
+import com.zs.common.model.LoginUserInfo;
+import com.zs.common.model.SysUser;
+import com.zs.common.redis.RedisUtil;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.HandlerExceptionResolver;
 
-import javax.crypto.SecretKey;
-import java.nio.charset.StandardCharsets;
+import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpServletRequest;
 import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
+@Component
 public class JwtUtil {
+
 
     // 秘钥
     private static final String secret = "mygege";
     // 有效时间 毫秒
-    private static final Long expire = 60 * 1000L;
+    private static final Long expire = 24 * 60 * 60 * 1000L;
     // 用户凭证
     private static final String header = "Authorization";
     // 签发者
     private static final String issuer = "zs.com";
 
+    // 随机一个key
     static Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+    @Autowired
+    private RedisUtil redisUtil;
+
+
     /**
      * 生成token签名
-     * @param subject
+     *
+     * @param
      * @return
      */
-    public static String createToken(String subject) {
-        Date now = new Date();
-        // 过期时间
-        Date expireDate = new Date(now.getTime() + expire * 1000);
-        //创建Signature SecretKey
-//        final SecretKey key = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
+    public  String createToken(LoginUserInfo loginUserInfo) {
 
         //header参数
         final Map<String, Object> headerMap = new HashMap<>();
         headerMap.put("alg", "HS256");
         headerMap.put("typ", "JWT");
-
+        System.out.println(key.getFormat());
+        System.out.println(DateUtil.formatDateTime(new Date(System.currentTimeMillis() + expire)) );
         //生成token
         String token = Jwts.builder()
                 .setHeader(headerMap)
-                .setSubject(subject)
-                .setIssuedAt(now)
-                .setExpiration(expireDate)
+                .setSubject(Constants.LOGIN_INFO + loginUserInfo.sysUser.getSysUserId())
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + expire))
                 .setIssuer(issuer)
-                .signWith(key,SignatureAlgorithm.HS256)
+                .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
+//        redisUtil.setObject(Constants.LOGIN_INFO  + loginUserInfo.getSysUser().getSysUserId(), loginUserInfo, expire, TimeUnit.SECONDS);
         return token;
     }
 
@@ -60,23 +75,46 @@ public class JwtUtil {
      * @param token token
      * @return
      */
-    public static Claims parseToken(String token) {
-
+    public  Claims parseToken(String token) {
+        System.out.println(key.getFormat());
         Claims claims = null;
         try {
-            //创建Signature SecretKey
-//            final SecretKey key = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
-
             claims = Jwts.parserBuilder()
                     .setSigningKey(key)
                     .build()
                     .parseClaimsJws(token)
                     .getBody();
-        } catch (JwtException e) {
+            return claims;
+        } catch (Exception e) {
             return null;
         }
-        return claims;
+
+
+//        try {
+//            claims = Jwts.parserBuilder()
+//                    .setSigningKey(key)
+//                    .build()
+//                    .parseClaimsJws(token)
+//                    .getBody();
+//        } catch (ExpiredJwtException e) {
+//            throw new RuntimeException("JWT过期");
+//        } catch (UnsupportedJwtException e) {
+//            throw new RuntimeException("不支持的JWT");
+//        } catch (MalformedJwtException e) {
+//            throw new RuntimeException("JWT格式错误");
+//        } catch (SignatureException e) {
+//            throw   new RuntimeException("签名异常"); // "签名异常"
+//        } catch (IllegalArgumentException e) {
+//            throw new RuntimeException("非法请求");
+//        } catch (Exception e) {
+//            throw new RuntimeException("解析异常");
+//        }
+//        System.out.println("*******" + token);
+//        return claims;
     }
+
+
+
 
     /**
      * 判断token是否过期
@@ -88,13 +126,17 @@ public class JwtUtil {
         return expiration.before(new Date());
     }
 
-    public static void main(String[] args) {
-        String token = createToken("111");
-        System.out.println("*******" + token);
+//    public static void main(String[] args) {
+//        LoginUserInfo loginUserInfo = new LoginUserInfo();
+//        SysUser sysUser = new SysUser();
+//        sysUser.setSysUserId(1111111L);
+//        loginUserInfo.setSysUser(sysUser);
+//        String token = createToken(loginUserInfo);
+//        System.out.println("*******" + token);
+//        Claims claims = parseToken(token);
+//        System.out.println(claims);
+//    }
 
-        Claims claims = parseToken(token);
 
-        System.out.println(claims);
-    }
 
 }

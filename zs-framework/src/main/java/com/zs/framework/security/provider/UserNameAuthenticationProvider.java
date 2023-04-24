@@ -1,6 +1,7 @@
 package com.zs.framework.security.provider;
 
 
+import com.zs.common.utils.JwtUtil;
 import com.zs.framework.security.service.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -60,6 +61,8 @@ public class UserNameAuthenticationProvider implements AuthenticationProvider {
         result.setDetails(authentication.getDetails());
         // 将 Authentication 认证信息对象绑定到 SecurityContext即安全上下文中
         SecurityContextHolder.getContext().setAuthentication(authentication);
+
+//        String token = JwtUtil.createToken();
         return result;
     }
 

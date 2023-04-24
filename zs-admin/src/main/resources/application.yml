@@ -35,3 +35,14 @@ mybatis-plus:
     # 驼峰
     map-underscore-to-camel-case: true
     call-setters-on-nulls: true
+# 日志配置
+logging:
+  level:
+    org.apache.ibatis: DEBUG
+
+security:
+  white:
+    url:
+      - /login
+      - /hello
+      - /list

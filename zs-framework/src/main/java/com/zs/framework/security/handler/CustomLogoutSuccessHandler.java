@@ -1,6 +1,7 @@
 package com.zs.framework.security.handler;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.alibaba.fastjson2.JSON;
+import com.zs.common.core.Result;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.stereotype.Component;
@@ -19,12 +20,8 @@ import java.util.Map;
 public class CustomLogoutSuccessHandler implements LogoutSuccessHandler {
     @Override
     public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-        System.out.print("登出成功");
-        Map<String, Object> result = new HashMap<String, Object>();
-        result.put("msg", "注销成功");
-        result.put("status", 200);
         response.setContentType("application/json;charset=UTF-8");
-        String s = new ObjectMapper().writeValueAsString(result);
+        String s = JSON.toJSONString(new Result().ok(200, "注销成功", null));
         response.getWriter().println(s);
     }
 }

@@ -8,6 +8,12 @@ public class DemoController
 {
     @GetMapping("hello")
     public String hello(){
-        return "Hello World";
+        Integer nu = 0/0;
+        return "123";
+    }
+
+    @GetMapping("hello1")
+    public String hello1(){
+        return "11111 World";
     }
 }
