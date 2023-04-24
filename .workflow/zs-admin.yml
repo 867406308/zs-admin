@@ -1,0 +1,32 @@
+version: '1.0'
+name: zs-admin
+displayName: zs-admin
+triggers:
+  trigger: auto
+  push:
+    branches:
+      precise:
+        - master
+stages:
+  - name: stage-c725e0e1
+    displayName: docker构建
+    strategy: naturally
+    trigger: auto
+    executor: []
+    steps:
+      - step: build@docker
+        name: build_docker
+        displayName: 镜像构建
+        type: account
+        repository: registry.cn-zhangjiakou.aliyuncs.com/my-admin/zs-admin
+        username: root
+        password: Zs@123..
+        tag: ${GITEE_PIPELINE_BUILD_NUMBER}
+        dockerfile: ./zs-admin/Dockerfile
+        context: ''
+        artifacts: []
+        isCache: false
+        parameter: {}
+        notify: []
+        strategy:
+          retry: '0'
