@@ -10,7 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>zs-admin</artifactId>
     <description>系统模块</description>
-
+    <packaging>jar</packaging>
     <properties>
         <java.version>1.8</java.version>
     </properties>
@@ -42,12 +42,14 @@
 <!--    </build>-->
 
     <build>
+        <finalName>${project.artifactId}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
                     <mainClass>com.zs.ZsAdminApplication</mainClass>
+
                 </configuration>
                 <executions>
                     <execution>
